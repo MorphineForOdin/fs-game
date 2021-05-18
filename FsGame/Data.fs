@@ -14,17 +14,20 @@ module Data =
                 SideB = { Action = Shield 1uy; Initiative = false }
             }; { 
                 SideA = { Action = Damage 1uy; Initiative = false }
-                SideB = { Action = Agility; Initiative = false }
+                SideB = { Action = None; Initiative = false }
             } ] }
             
     let skeleton = { 
         Name = "Skeleton"
-        Health = 5uy
+        Health = 6uy
         Tokens = [
             { 
                 SideA = { Action = Damage 1uy; Initiative = false }
                 SideB = { Action = None; Initiative = true }
             }; { 
                 SideA = { Action = Damage 1uy; Initiative = true }
+                SideB = { Action = Shield 1uy; Initiative = false }
+            }; { 
+                SideA = { Action = Damage 1uy; Initiative = false }
                 SideB = { Action = Shield 1uy; Initiative = false }
             } ] }
