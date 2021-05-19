@@ -1,4 +1,3 @@
-open System
 open Domain.Data
 open Domain.Logic
 open Domain.Console
@@ -9,8 +8,7 @@ let main argv =
     printHero warrior
     printHero skeleton
     printfn ""
-    printfn "*** Start combat ***"
-    
-    let result = state
-    printfn "%A" result
+    let winner = start (warrior, skeleton)
+    printfn "*** WINNER ***"
+    printHero winner
     0
