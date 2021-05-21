@@ -5,7 +5,7 @@ module Console =
         match action with
         | Damage n -> $"{n}D"
         | Shield n -> $"{n}S"
-        | Agility -> "A"
+        //| Agility -> "A"
         | None -> "N"
     
     let getTokenInitiativeString initiative =
@@ -34,3 +34,13 @@ module Console =
     let printStartRound hero sides initiative =
         let sidesStr = getTokensSideString sides
         printfn $"{hero.Name} H={hero.Health}; T:{sidesStr}; I={initiative}"
+    
+    let printAvailableActions sides =
+        sides
+        |> List.filter (fun s -> match s.Action with | Shield _ -> false | _ -> true)
+        |> List.map (fun s -> match s.Action with | Damage _ -> "Damage [D]" | _ -> "")
+        |> List.filter (fun s -> s <> "")
+        |> List.append ["Pass [P]"]
+        |> Seq.distinctBy (fun s -> s)
+        |> List.ofSeq
+        |> List.iter (fun s -> printfn "%s" s)

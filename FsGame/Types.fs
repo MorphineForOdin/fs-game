@@ -6,7 +6,6 @@ module DomainTypes =
     type TokenAction =
         | Damage of byte
         | Shield of byte
-        | Agility
         | None
 
     type TokenSide = {
@@ -21,3 +20,7 @@ module DomainTypes =
         Name: string;
         Health: byte;
         Tokens: Token list }
+
+    type HeroCombatState = {
+        Hero: Hero;
+        Sides: TokenSide list }

@@ -1,5 +1,8 @@
 namespace Domain
 
+open System
+open Console
+
 module Logic = 
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
@@ -14,7 +17,7 @@ module Logic =
 
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
-
+    
     let rec start (attacker, defender) =
         match attacker.Health, defender.Health with
         | (0uy, _) -> defender
@@ -32,11 +35,14 @@ module Logic =
 
             let firstPlayer =
                 if attackerInitiative >= defenderInitiative
-                then attacker
-                else defender
-            printfn $"{firstPlayer.Name} is a First player."
+                then { Hero = attacker; Sides = attackerTokens }
+                else { Hero = defender; Sides = defenderTokens }
+            printfn $"{firstPlayer.Hero.Name} is a First player."
 
             // TODO: Actions cycle...
+            printfn "Choose action: "
+            printAvailableActions firstPlayer.Sides
+            let action = Console.ReadLine ()
 
             let hero1H = attacker.Health - 1uy;
             let hero2H = defender.Health - 1uy;
