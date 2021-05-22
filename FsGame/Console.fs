@@ -1,11 +1,12 @@
-namespace Domain
+namespace RB4.IO
+
+open RB4.Domain
 
 module Console = 
     let getTokenActionString action =
         match action with
         | Damage n -> $"{n}D"
         | Shield n -> $"{n}S"
-        //| Agility -> "A"
         | None -> "N"
     
     let getTokenInitiativeString initiative =
@@ -31,7 +32,7 @@ module Console =
         let tokensS = getTokensString hero.Tokens
         printfn "HERO: %s \t(H=%d; T=[%s])" hero.Name hero.Health (tokensS.Trim ())
     
-    let printStartRound hero sides initiative =
+    let printStartRound (hero: Hero) sides initiative =
         let sidesStr = getTokensSideString sides
         printfn $"{hero.Name} H={hero.Health}; T:{sidesStr}; I={initiative}"
     

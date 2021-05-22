@@ -1,11 +1,25 @@
-namespace Domain
+namespace RB4.Core
 
 open System
-open Console
+
+open RB4
+open RB4.Domain
+open RB4.Data
+open RB4.IO
 
 module Logic = 
+    let rec readHero () =
+        let heroInput = Console.ReadLine ()
+        let heroOption = Int32.TryParse heroInput |> Option.fromTryTuple
+        match heroOption with
+        | Some heroIndex -> Static.heroes |> Array.item heroIndex
+        | _ ->
+            printf "Not valid hero, try again: "
+            readHero ()
+
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
+    let getRandomInt max = randomGenerator.Next max
 
     let getRandomTokenSide token =
         match getRandomBool () with
@@ -18,7 +32,7 @@ module Logic =
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
     
-    let rec start (attacker, defender) =
+    let rec start attacker defender =
         match attacker.Health, defender.Health with
         | (0uy, _) -> defender
         | (_, 0uy) -> attacker
@@ -41,10 +55,10 @@ module Logic =
 
             // TODO: Actions cycle...
             printfn "Choose action: "
-            printAvailableActions firstPlayer.Sides
+            Console.printAvailableActions firstPlayer.Sides
             let action = Console.ReadLine ()
 
             let hero1H = attacker.Health - 1uy;
             let hero2H = defender.Health - 1uy;
             printfn ""
-            start ({attacker with Health = hero1H}, {defender with Health = hero2H})
+            start {attacker with Health = hero1H} {defender with Health = hero2H}

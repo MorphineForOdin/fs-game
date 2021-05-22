@@ -1,8 +1,7 @@
-namespace Domain
+namespace RB4.Domain
 
 [<AutoOpen>]
-module DomainTypes = 
-
+module Types = 
     type TokenAction =
         | Damage of byte
         | Shield of byte
@@ -20,6 +19,10 @@ module DomainTypes =
         Name: string;
         Health: byte;
         Tokens: Token list }
+
+    type Player = {
+        Name: string
+        Hero: Hero }
 
     type HeroCombatState = {
         Hero: Hero;
