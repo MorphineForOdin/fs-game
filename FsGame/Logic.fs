@@ -1,13 +1,8 @@
 namespace RB4.Core
 
-open System
-
-open RB4
-open RB4.Domain
-open RB4.Data
-open RB4.IO
-
 module Logic = 
+    let l = 1
+    (*
     let rec readHero () =
         let heroInput = Console.ReadLine ()
         let heroOption = Int32.TryParse heroInput |> Option.fromTryTuple
@@ -62,3 +57,4 @@ module Logic =
             let hero2H = defender.Health - 1uy;
             printfn ""
             start {attacker with Health = hero1H} {defender with Health = hero2H}
+        *)

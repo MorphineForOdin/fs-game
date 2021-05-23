@@ -1,13 +1,13 @@
 open System
-
-open RB4.Domain
-open RB4.Data
 open RB4.IO.Console
-open RB4.Core.Logic
 
 [<EntryPoint>]
 let main argv =
-    printfn "***** RB4 *****"
+    printWelcome ()
+    
+
+
+    (*
     printf "Enter your name: "
     let playerName = Console.ReadLine ()
     
@@ -29,4 +29,5 @@ let main argv =
         printHero winner
     | _ -> printfn "*** BYE-BYE ***"
     Console.ReadKey () |> ignore
+    *)
     0

@@ -1,19 +1,26 @@
 namespace RB4.IO
 
+open System
 open RB4.Domain
 
 module Console = 
+    let printWelcome () =
+        Console.ForegroundColor <- ConsoleColor.Cyan
+        printfn "*** RB4 ***"
+        Console.ResetColor ()
+
+    (*
     let getTokenActionString action =
         match action with
         | Damage n -> $"{n}D"
         | Shield n -> $"{n}S"
         | None -> "N"
-    
+
     let getTokenInitiativeString initiative =
         match initiative with
         | true -> "+"
         | false -> "-"
-    
+        
     let getTokenSideString side =
         getTokenActionString side.Action + getTokenInitiativeString side.Initiative
 
@@ -45,3 +52,4 @@ module Console =
         |> Seq.distinctBy (fun s -> s)
         |> List.ofSeq
         |> List.iter (fun s -> printfn "%s" s)
+    *)

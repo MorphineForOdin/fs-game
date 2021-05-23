@@ -2,28 +2,29 @@ namespace RB4.Domain
 
 [<AutoOpen>]
 module Types = 
-    type TokenAction =
-        | Damage of byte
+    type CombatTokenActionType =
+        | PhysicalAttack of byte
+        | MagicalAttack of byte
         | Shield of byte
         | None
-
-    type TokenSide = {
-        Action: TokenAction;
+    type CombatTokenAction = {
+        Action: CombatTokenActionType
         Initiative: bool }
-
-    type Token = {
-        SideA: TokenSide;
-        SideB: TokenSide }
-
-    type Hero = {
-        Name: string;
-        Health: byte;
-        Tokens: Token list }
-
+    type CombatToken = Map<bool, CombatTokenAction>
+    type Character = {
+        Name: string
+        Health: byte
+        Tokens: CombatToken list }
+    type Hero = { Character: Character }
+    type Monster = { Character: Character }
     type Player = {
         Name: string
         Hero: Hero }
-
-    type HeroCombatState = {
-        Hero: Hero;
-        Sides: TokenSide list }
+    
+    type CombatAttackType = Physic | Magic
+    type CombatActionType = Attack of byte * CombatAttackType
+    type CombatReactionType = Block of byte
+    type CombatAction =
+        | Action of CombatActionType
+        | Reaction of CombatReactionType
+        | Pass
