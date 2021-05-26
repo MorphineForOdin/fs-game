@@ -4,7 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resources\welcome.txt" />
+    <Content Update="resources\welcome.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="resources\logo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Extensions.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="Data.fs" />

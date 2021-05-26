@@ -12,10 +12,12 @@ module Console =
                 do yield reader.ReadLine () }
 
     let printWelcome () =
-        Console.ForegroundColor <- ConsoleColor.Cyan
-        readLines @"resources/welcome.txt"
-        |> Seq.iter (fun line -> printfn "%s" line)
+        Console.Clear ()
+        Console.ForegroundColor <- ConsoleColor.Magenta
+        readLines @"resources/welcome.txt" |> Seq.iter (fun line -> printfn "%s" line)
         Console.ResetColor ()
+
+
 
     (*
     let getTokenActionString action =
