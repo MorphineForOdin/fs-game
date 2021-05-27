@@ -1,24 +1,52 @@
 namespace RB4.IO
 
 open System
-open System.IO
+open RB4
+open RB4.Operators
 open RB4.Domain
 
 module Console = 
-    let readLines (filePath: string) = 
-        seq {
-            use reader = File.OpenText filePath
-            while not reader.EndOfStream
-                do yield reader.ReadLine () }
-
-    let printWelcome () =
+    let startGame () =
         Console.Clear ()
         Console.ForegroundColor <- ConsoleColor.Magenta
-        readLines @"resources/welcome.txt" |> Seq.iter (fun line -> printfn "%s" line)
-        Console.ResetColor ()
+        let welcomePath = __SOURCE_DIRECTORY__ +/ @"resources\welcome.txt"
+        File.readLines welcomePath |> Seq.iter (fun line -> printfn "%s" line)
+        Console.ForegroundColor <- ConsoleColor.Cyan
+        printf "Start game? [Y]es|[N]o: "
+        match Console.ReadLine () with
+        | "Y" | "y" | "Yes" | "yes" | "YES" -> 
+            Console.ResetColor ()
+            true
+        | _ -> false
 
+    let printHero (hero: Hero) =
+        printfn "HERO: %s" hero.Character.Name
+        //let tokensS = getTokensString hero.Tokens
+        //printfn "HERO: %s \t(H=%d; T=[%s])" hero.Name hero.Health (tokensS.Trim ())
 
+    let rec readHero heroes =
+        let heroInput = Console.ReadLine ()
+        let heroOption = Int32.TryParse heroInput |> Option.fromTryTuple
+        match heroOption with
+        | Some heroIndex -> heroes |> Array.item heroIndex
+        | _ ->
+            printf "Not valid hero, try again: "
+            readHero heroes
 
+    let initPlayer (heroes: Hero array) =
+        Console.Clear ()
+        Console.ForegroundColor <- ConsoleColor.Magenta
+        let welcomePath = __SOURCE_DIRECTORY__ +/ @"resources\logo.txt"
+        File.readLines welcomePath |> Seq.iter (fun line -> printfn "%s" line)
+        Console.ForegroundColor <- ConsoleColor.Cyan
+        printf "Enter your name: "
+        let playerName = Console.ReadLine ()
+        printfn "Hi %s, please select hero from pool:" playerName
+        heroes |> Array.iteri (fun i h -> printf "[%d] - " i; printHero h)
+        let hero = readHero heroes
+        printfn "Hey, %s! Hero %s is choosen." playerName hero.Character.Name
+        { Name = playerName; Hero = hero }
+    
     (*
     let getTokenActionString action =
         match action with
@@ -44,10 +72,6 @@ module Console =
 
     let getTokensString tokens =
         tokens |> List.fold (fun acc cur -> $"{acc} {getTokenString cur}") ""
-
-    let printHero hero =
-        let tokensS = getTokensString hero.Tokens
-        printfn "HERO: %s \t(H=%d; T=[%s])" hero.Name hero.Health (tokensS.Trim ())
     
     let printStartRound (hero: Hero) sides initiative =
         let sidesStr = getTokensSideString sides

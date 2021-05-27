@@ -3,15 +3,6 @@ namespace RB4.Core
 module Logic = 
     let l = 1
     (*
-    let rec readHero () =
-        let heroInput = Console.ReadLine ()
-        let heroOption = Int32.TryParse heroInput |> Option.fromTryTuple
-        match heroOption with
-        | Some heroIndex -> Static.heroes |> Array.item heroIndex
-        | _ ->
-            printf "Not valid hero, try again: "
-            readHero ()
-
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
     let getRandomInt max = randomGenerator.Next max

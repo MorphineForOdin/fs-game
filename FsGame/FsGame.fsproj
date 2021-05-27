@@ -11,9 +11,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Extensions.fs" />
-    <Compile Include="Types.fs" />
+    <Compile Include="Domain.fs" />
+    <Compile Include="Core.fs" />
     <Compile Include="Data.fs" />
-    <Compile Include="Logic.fs" />
     <Compile Include="Console.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
