@@ -1,12 +1,14 @@
 namespace RB4.Core
 
-module Logic = 
-    let l = 1
-    (*
+module Combat = 
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
     let getRandomInt max = randomGenerator.Next max
 
+    let start attacker defender =
+        attacker
+
+    (*
     let getRandomTokenSide token =
         match getRandomBool () with
         | true -> token.SideA
