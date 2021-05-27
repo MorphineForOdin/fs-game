@@ -6,8 +6,9 @@ open RB4.IO
 
 [<EntryPoint>]
 let main argv =
-    let welcomePath = __SOURCE_DIRECTORY__ +/ @"resources\welcome.txt"
-    let logoPath = __SOURCE_DIRECTORY__ +/ @"resources\logo.txt"
+    Console.ReadKey () |> ignore
+    let welcomePath = __SOURCE_DIRECTORY__ +/ "resources" +/ "welcome.txt"
+    let logoPath = __SOURCE_DIRECTORY__ +/ "resources" +/ "logo.txt"
     match Console.startGame welcomePath with
     | true ->
         let player = Console.initPlayer logoPath Heroes.heroes

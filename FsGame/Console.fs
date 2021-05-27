@@ -1,6 +1,7 @@
 namespace RB4.IO
 
 open System
+open System.Threading
 open RB4
 open RB4.Domain
 
@@ -15,7 +16,8 @@ module Console =
         Console.Clear ()
         Console.ResetColor ()
         Console.ForegroundColor <- ConsoleColor.Magenta
-        File.readLines path |> Seq.iter (fun line -> printfn "%s" line)
+        File.readLines path
+            |> Seq.iter (fun line -> printfn "%s" line; Thread.Sleep 100)
         Console.ForegroundColor <- ConsoleColor.Cyan
 
     let startGame welcomePath =
