@@ -17,9 +17,13 @@ let main argv =
             | true ->
                 let randomIndex = Combat.getRandomInt Monsters.monsters.Length
                 let randomEnemy = Monsters.monsters |> Array.item randomIndex
-                let winner = Combat.start player.Hero randomEnemy
+                let winner =
+                    Combat.start
+                        (Console.printStartRound)
+                        player.Hero.Character
+                        randomEnemy.Character
                 printfn "*** WINNER ***"
-                Console.printCharacter winner.Character
+                Console.printCharacter winner
             | false -> printfn "Are you afraid, %s?" player.Name
         printfn "We would miss you %s ..." player.Name
     | false -> printfn "That's a big mistake! ..."

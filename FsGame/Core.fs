@@ -1,26 +1,19 @@
 namespace RB4.Core
 
+open RB4.Domain
+
 module Combat = 
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
     let getRandomInt max = randomGenerator.Next max
 
-    let start attacker defender =
-        attacker
-
-    (*
-    let getRandomTokenSide token =
-        match getRandomBool () with
-        | true -> token.SideA
-        | false -> token.SideB
-    
     let throwTokens tokens =
-        tokens |> List.map getRandomTokenSide
+        tokens |> List.map (fun t -> Map.find (getRandomBool ()) t)
 
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
     
-    let rec start attacker defender =
+    let rec start printRound attacker defender =
         match attacker.Health, defender.Health with
         | (0uy, _) -> defender
         | (_, 0uy) -> attacker
@@ -29,25 +22,23 @@ module Combat =
             
             let attackerTokens = throwTokens attacker.Tokens
             let attackerInitiative = sumInitiative attackerTokens
-            Console.printStartRound attacker attackerTokens attackerInitiative
+            printRound attacker attackerTokens attackerInitiative
             
             let defenderTokens = throwTokens defender.Tokens
             let defenderInitiative = sumInitiative defenderTokens
-            Console.printStartRound defender defenderTokens defenderInitiative
+            printRound defender defenderTokens defenderInitiative
 
-            let firstPlayer =
+            let firstPlayer, firstTokens =
                 if attackerInitiative >= defenderInitiative
-                then { Hero = attacker; Sides = attackerTokens }
-                else { Hero = defender; Sides = defenderTokens }
-            printfn $"{firstPlayer.Hero.Name} is a First player."
+                then attacker, attackerTokens
+                else defender, defenderTokens
+            printfn $"{firstPlayer.Name} is a First player."
 
             // TODO: Actions cycle...
             printfn "Choose action: "
-            Console.printAvailableActions firstPlayer.Sides
-            let action = Console.ReadLine ()
-
+            //Console.printAvailableActions firstPlayer.Sides
+            
             let hero1H = attacker.Health - 1uy;
             let hero2H = defender.Health - 1uy;
             printfn ""
-            start {attacker with Health = hero1H} {defender with Health = hero2H}
-        *)
+            start printRound {attacker with Health = hero1H} {defender with Health = hero2H}

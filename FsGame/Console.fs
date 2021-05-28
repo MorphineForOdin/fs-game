@@ -69,11 +69,12 @@ module Console =
         printfn "Hey, %s! Hero %s is choosen." playerName hero.Character.Name
         { Name = playerName; Hero = hero }
     
-    (*
-    let printStartRound (hero: Hero) sides initiative =
-        let sidesStr = getTokensSideString sides
-        printfn $"{hero.Name} H={hero.Health}; T:{sidesStr}; I={initiative}"
+    let printStartRound (character: Character) actions (initiative: int) =
+        let actionsString = 
+            actions |> List.fold (fun acc cur -> $"{acc}{getTokenActionString cur} ") " "
+        printfn $"{character.Name} H={character.Health}; T:{actionsString}; I={initiative}"
     
+    (*
     let printAvailableActions sides =
         sides
         |> List.filter (fun s -> match s.Action with | Shield _ -> false | _ -> true)
