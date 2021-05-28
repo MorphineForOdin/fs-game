@@ -21,5 +21,11 @@ module File =
             while not reader.EndOfStream
                 do yield reader.ReadLine () }
 
+[<RequireQualifiedAccess>]
+module Result =
+    let fromOption error = function
+        | Some value -> Ok value
+        | None -> Error error
+
 module Operators =
     let (+/) parentPath siblingPath = Path.Combine(parentPath, siblingPath)
