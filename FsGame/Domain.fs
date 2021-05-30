@@ -6,7 +6,7 @@ module Types =
         | PhysicalAttack of byte
         | MagicalAttack of byte
         | Shield of byte
-        | None
+        | Nothing
     type CombatTokenAction = {
         Action: CombatTokenActionType
         Initiative: bool }
@@ -28,3 +28,7 @@ module Types =
         | Action of CombatActionType
         | Reaction of CombatReactionType
         | Pass
+    
+    type GetWinner = Character * Character -> Character option
+    type ThrowTokens = CombatToken list -> CombatTokenAction list
+    type CalculateInitiative = CombatTokenAction list -> byte

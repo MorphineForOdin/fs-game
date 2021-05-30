@@ -14,10 +14,10 @@ module Heroes =
                     false, { Action = Shield 1uy; Initiative = false } ]
                 Map.initFromList [
                     true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = None; Initiative = true } ]
+                    false, { Action = Nothing; Initiative = true } ]
                 Map.initFromList [
                     true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = None; Initiative = false } ] ] } }
+                    false, { Action = Nothing; Initiative = false } ] ] } }
     let masterThorn: Hero = {
         Character = {
             Name = "Master Thorn"
@@ -28,10 +28,10 @@ module Heroes =
                     false, { Action = Shield 1uy; Initiative = false } ]
                 Map.initFromList [
                     true, { Action = MagicalAttack 1uy; Initiative = true }
-                    false, { Action = None; Initiative = false } ]
+                    false, { Action = Nothing; Initiative = false } ]
                 Map.initFromList [
                     true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = None; Initiative = true } ] ] } }
+                    false, { Action = Nothing; Initiative = true } ] ] } }
     let heroes = [| lordHawthorne; masterThorn |]
 
 module Monsters =
@@ -42,7 +42,7 @@ module Monsters =
             Tokens = [
                 Map.initFromList [
                     true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = None; Initiative = true } ]
+                    false, { Action = Nothing; Initiative = true } ]
                 Map.initFromList [
                     true, { Action = PhysicalAttack 1uy; Initiative = true }
                     false, { Action = Shield 1uy; Initiative = false } ]
@@ -56,10 +56,10 @@ module Monsters =
             Tokens = [
                 Map.initFromList [
                     true, { Action = MagicalAttack 2uy; Initiative = false }
-                    false, { Action = None; Initiative = true } ]
+                    false, { Action = Nothing; Initiative = true } ]
                 Map.initFromList [
                     true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = None; Initiative = true } ]
+                    false, { Action = Nothing; Initiative = true } ]
                 Map.initFromList [
                     true, { Action = MagicalAttack 1uy; Initiative = false }
                     false, { Action = Shield 1uy; Initiative = true } ] ] } }

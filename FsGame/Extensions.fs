@@ -1,7 +1,5 @@
 namespace RB4
 
-open System.IO
-
 [<RequireQualifiedAccess>]
 module Option =
     let fromTryTuple = function
@@ -15,6 +13,7 @@ module Map =
 
 [<RequireQualifiedAccess>]
 module File =
+    open System.IO
     let readLines (filePath: string) = 
         seq {
             use reader = File.OpenText filePath
@@ -28,4 +27,5 @@ module Result =
         | None -> Error error
 
 module Operators =
+    open System.IO
     let (+/) parentPath siblingPath = Path.Combine(parentPath, siblingPath)

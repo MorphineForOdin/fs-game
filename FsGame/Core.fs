@@ -3,12 +3,18 @@ namespace RB4.Core
 open RB4.Domain
 
 module Combat = 
+    let getWinner (attacker, defender) = 
+        match attacker.Health, defender.Health with
+        | 0uy, _ -> Some defender
+        | _, 0uy -> Some attacker
+        | _ -> None
+
     let randomGenerator = System.Random()
     let getRandomBool () = randomGenerator.NextDouble() >= 0.5
     let getRandomInt max = randomGenerator.Next max
 
     let throwTokens tokens =
-        tokens |> List.map (fun t -> Map.find (getRandomBool ()) t)
+        tokens |> List.map (fun t -> t |> Map.find (getRandomBool ()))
 
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)

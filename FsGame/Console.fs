@@ -30,7 +30,7 @@ module Console =
             | PhysicalAttack amount -> $"{amount}P"
             | MagicalAttack amount -> $"{amount}M"
             | Shield amount -> $"{amount}S"
-            | None -> "N"
+            | Nothing -> "N"
         let initiativeString = 
             match tokenSide.Initiative with
             | true -> "+"
