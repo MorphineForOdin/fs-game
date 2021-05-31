@@ -73,15 +73,3 @@ module Console =
         let actionsString = 
             actions |> List.fold (fun acc cur -> $"{acc}{getTokenActionString cur} ") " "
         printfn $"{character.Name} H={character.Health}; T:{actionsString}; I={initiative}"
-    
-    (*
-    let printAvailableActions sides =
-        sides
-        |> List.filter (fun s -> match s.Action with | Shield _ -> false | _ -> true)
-        |> List.map (fun s -> match s.Action with | Damage _ -> "Damage [D]" | _ -> "")
-        |> List.filter (fun s -> s <> "")
-        |> List.append ["Pass [P]"]
-        |> Seq.distinctBy (fun s -> s)
-        |> List.ofSeq
-        |> List.iter (fun s -> printfn "%s" s)
-    *)

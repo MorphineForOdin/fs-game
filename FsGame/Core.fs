@@ -19,6 +19,19 @@ module Combat =
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
     
+    let getAction = function
+        | PhysicalAttack amount -> Action (Attack (amount, Physic))
+        | MagicalAttack amount -> Action (Attack (amount, Magic))
+        | Shield amount -> Reaction (Block amount)
+        | Nothing -> Pass
+
+    // let getPossibleActions tokenActions =
+    //     tokenActions
+    //     |> List.map (fun token -> token.Action)
+    //     |> List.map getAction
+    //     |> List.groupBy (fun tokenAction -> )
+    //     |> List.map
+    
     let rec start printRound attacker defender =
         match attacker.Health, defender.Health with
         | (0uy, _) -> defender

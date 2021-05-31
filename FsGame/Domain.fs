@@ -32,3 +32,4 @@ module Types =
     type GetWinner = Character * Character -> Character option
     type ThrowTokens = CombatToken list -> CombatTokenAction list
     type CalculateInitiative = CombatTokenAction list -> byte
+    type GetPossibleActions = CombatTokenAction list -> CombatAction list
