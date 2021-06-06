@@ -9,7 +9,9 @@ module Option =
 [<RequireQualifiedAccess>]
 module Map =
     let initFromList pairs =
-        pairs |> List.fold (fun m (key, value) -> Map.add key value m) Map.empty
+        pairs |> List.fold
+            (fun map (key, value) -> Map.add key value map)
+            Map.empty
 
 [<RequireQualifiedAccess>]
 module File =
@@ -28,4 +30,5 @@ module Result =
 
 module Operators =
     open System.IO
-    let (+/) parentPath siblingPath = Path.Combine(parentPath, siblingPath)
+    let (+/) parentPath siblingPath =
+        Path.Combine(parentPath, siblingPath)

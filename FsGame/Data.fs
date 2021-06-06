@@ -9,29 +9,29 @@ module Heroes =
             Name = "Lord Hawthorne"
             Health = 9uy
             Tokens = [
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 2uy; Initiative = false }
-                    false, { Action = Shield 1uy; Initiative = false } ]
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = true } ]
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = false } ] ] } }
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 2uy; Initiative = false }
+                    false, { Type = Shield 1uy; Initiative = false } ])
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = true } ])
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = false } ]) ] } }
     let masterThorn: Hero = {
         Character = {
             Name = "Master Thorn"
             Health = 8uy
             Tokens = [
-                Map.initFromList [
-                    true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = Shield 1uy; Initiative = false } ]
-                Map.initFromList [
-                    true, { Action = MagicalAttack 1uy; Initiative = true }
-                    false, { Action = Nothing; Initiative = false } ]
-                Map.initFromList [
-                    true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = true } ] ] } }
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    false, { Type = Shield 1uy; Initiative = false } ])
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 1uy; Initiative = true }
+                    false, { Type = Nothing; Initiative = false } ])
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = true } ]) ] } }
     let heroes = [| lordHawthorne; masterThorn |]
 
 module Monsters =
@@ -40,27 +40,27 @@ module Monsters =
             Name = "Skeleton"
             Health = 6uy
             Tokens = [
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = true } ]
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 1uy; Initiative = true }
-                    false, { Action = Shield 1uy; Initiative = false } ]
-                Map.initFromList [
-                    true, { Action = PhysicalAttack 1uy; Initiative = false }
-                    false, { Action = Shield 1uy; Initiative = false } ] ] } }
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = true } ])
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 1uy; Initiative = true }
+                    false, { Type = Shield 1uy; Initiative = false } ])
+                (0.5, Map.initFromList [
+                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    false, { Type = Shield 1uy; Initiative = false } ]) ] } }
     let warlock : Monster = {
         Character = {
             Name = "Warlock"
             Health = 5uy
             Tokens = [
-                Map.initFromList [
-                    true, { Action = MagicalAttack 2uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = true } ]
-                Map.initFromList [
-                    true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = Nothing; Initiative = true } ]
-                Map.initFromList [
-                    true, { Action = MagicalAttack 1uy; Initiative = false }
-                    false, { Action = Shield 1uy; Initiative = true } ] ] } }
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 2uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = true } ])
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    false, { Type = Nothing; Initiative = true } ])
+                (0.5, Map.initFromList [
+                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    false, { Type = Shield 1uy; Initiative = true } ]) ] } }
     let monsters = [| skeleton; warlock |]

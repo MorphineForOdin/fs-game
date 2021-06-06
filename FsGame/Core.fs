@@ -10,33 +10,19 @@ module Combat =
         | _ -> None
 
     let randomGenerator = System.Random()
-    let getRandomBool () = randomGenerator.NextDouble() >= 0.5
+    let getRandomBool step = randomGenerator.NextDouble() >= step
     let getRandomInt max = randomGenerator.Next max
 
     let throwTokens tokens =
-        tokens |> List.map (fun t -> t |> Map.find (getRandomBool ()))
+        tokens |> List.map (fun (s, t) -> t |> Map.find (getRandomBool s))
 
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
-    
-    let getAction = function
-        | PhysicalAttack amount -> Action (Attack (amount, Physic))
-        | MagicalAttack amount -> Action (Attack (amount, Magic))
-        | Shield amount -> Reaction (Block amount)
-        | Nothing -> Pass
 
-    // let getPossibleActions tokenActions =
-    //     tokenActions
-    //     |> List.map (fun token -> token.Action)
-    //     |> List.map getAction
-    //     |> List.groupBy (fun tokenAction -> )
-    //     |> List.map
-    
     let rec start printRound attacker defender =
-        match attacker.Health, defender.Health with
-        | (0uy, _) -> defender
-        | (_, 0uy) -> attacker
-        | _ ->
+        match getWinner (attacker, defender) with
+        | Some winner -> winner
+        | None ->
             printfn "*** ROUND ***"
             
             let attackerTokens = throwTokens attacker.Tokens
@@ -60,4 +46,7 @@ module Combat =
             let hero1H = attacker.Health - 1uy;
             let hero2H = defender.Health - 1uy;
             printfn ""
-            start printRound {attacker with Health = hero1H} {defender with Health = hero2H}
+            start
+                printRound
+                {attacker with Health = hero1H}
+                {defender with Health = hero2H}
