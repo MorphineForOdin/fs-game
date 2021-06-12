@@ -3,6 +3,44 @@ namespace RB4.Core
 open RB4.Domain
 
 module Combat = 
+    let throwTokens state =
+        let attackerTokens, attackerRounTokens = [], []
+        let defenderTokens = []
+        { state with
+            AttackerRoundTokens = attackerTokens
+            DefenderRoundTokens = defenderTokens }
+    
+    let calculateInitiative state = state
+    let generateQueue state = state
+    let rec tacticPhase state = state
+
+    let rec round state =
+        state
+        |> throwTokens
+        |> calculateInitiative
+        |> generateQueue
+        |> tacticPhase
+        
+    let start attacker defender =
+        let getCharacter = function
+            | Player player -> player.Hero.Character
+            | Monster monster -> monster.Character
+
+        round {
+            Attacker = attacker
+            AttackerTokens = (getCharacter attacker).Tokens
+            AttackerRoundTokens = []
+            Defender = defender
+            DefenderTokens = (getCharacter defender).Tokens
+            DefenderRoundTokens = [] }
+
+
+
+
+
+
+
+
     let getWinner (attacker, defender) = 
         match attacker.Health, defender.Health with
         | 0uy, _ -> Some defender
@@ -14,7 +52,9 @@ module Combat =
     let getRandomInt max = randomGenerator.Next max
 
     let throwTokens tokens =
-        tokens |> List.map (fun (s, t) -> t |> Map.find (getRandomBool s))
+        tokens |> List.map (fun (step, token) -> 
+            let proc = getRandomBool step
+            token |> Map.find proc)
 
     let sumInitiative tokens =
         tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)

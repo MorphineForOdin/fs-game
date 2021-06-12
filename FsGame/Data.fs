@@ -10,13 +10,13 @@ module Heroes =
             Health = 9uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 2uy; Initiative = false }
+                    true, { Type = Axe 2uy; Initiative = false }
                     false, { Type = Shield 1uy; Initiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    true, { Type = Axe 1uy; Initiative = false }
                     false, { Type = Nothing; Initiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    true, { Type = Axe 1uy; Initiative = false }
                     false, { Type = Nothing; Initiative = false } ]) ] } }
     let masterThorn: Hero = {
         Character = {
@@ -24,13 +24,13 @@ module Heroes =
             Health = 8uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    true, { Type = Spell 1uy; Initiative = false }
                     false, { Type = Shield 1uy; Initiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 1uy; Initiative = true }
+                    true, { Type = Spell 1uy; Initiative = true }
                     false, { Type = Nothing; Initiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    true, { Type = Spell 1uy; Initiative = false }
                     false, { Type = Nothing; Initiative = true } ]) ] } }
     let heroes = [| lordHawthorne; masterThorn |]
 
@@ -41,13 +41,13 @@ module Monsters =
             Health = 6uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    true, { Type = Axe 1uy; Initiative = false }
                     false, { Type = Nothing; Initiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 1uy; Initiative = true }
+                    true, { Type = Axe 1uy; Initiative = true }
                     false, { Type = Shield 1uy; Initiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = PhysicalAttack 1uy; Initiative = false }
+                    true, { Type = Axe 1uy; Initiative = false }
                     false, { Type = Shield 1uy; Initiative = false } ]) ] } }
     let warlock : Monster = {
         Character = {
@@ -55,12 +55,12 @@ module Monsters =
             Health = 5uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 2uy; Initiative = false }
+                    true, { Type = Spell 2uy; Initiative = false }
                     false, { Type = Nothing; Initiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    true, { Type = Spell 1uy; Initiative = false }
                     false, { Type = Nothing; Initiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = MagicalAttack 1uy; Initiative = false }
+                    true, { Type = Spell 1uy; Initiative = false }
                     false, { Type = Shield 1uy; Initiative = true } ]) ] } }
     let monsters = [| skeleton; warlock |]

@@ -37,8 +37,8 @@ module Console =
     let getTokenString tokenSide =
         let actionString = 
             match tokenSide.Type with
-            | PhysicalAttack amount -> $"{amount}P"
-            | MagicalAttack amount -> $"{amount}M"
+            | Axe amount -> $"{amount}P"
+            | Spell amount -> $"{amount}M"
             | Shield amount -> $"{amount}S"
             | Nothing -> "N"
         let initiativeString = 
