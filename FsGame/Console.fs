@@ -4,6 +4,7 @@ open System
 open System.Threading
 open RB4
 open RB4.Domain
+open RB4.Core
 
 module Console = 
     let printImage path =
@@ -54,8 +55,7 @@ module Console =
 
     let getTokensString (tokens: CombatTokenMap list) =
         tokens
-        |> List.map (fun (step, map) -> map)
-        |> List.fold (fun acc cur -> $"{acc}{getTokenMapString cur} ") " "
+        |> List.fold (fun acc (proc, map) -> $"{acc}{proc}={getTokenMapString map} ") " "
 
     let printCharacter (character: Character) =
         let tokensStr = getTokensString character.Tokens
@@ -82,10 +82,31 @@ module Console =
     
     let printCombatStart () =
         match proceed "Start combat?" with
-        | true -> Combat.Initiate
-        | false -> Combat.Skip
+        | true -> Initiate
+        | false -> Skip
 
-    let printStartRound (character: Character) actions (initiative: int) =
-        let actionsString = 
-            actions |> List.fold (fun acc cur -> $"{acc}{getTokenString cur} ") " "
-        printfn $"{character.Name} H={character.Health}; T:{actionsString}; I={initiative}"
+    let getPrintState name health tokens roundT initiative =
+        let tokensStr = getTokensString tokens
+        let actionsString = roundT |> List.fold (fun acc cur -> $"{acc}{getTokenString cur} ") " "
+        $"{name} H={health}; T=[{tokensStr}]; R=[{actionsString}]; I={initiative}"
+    
+    let printCombatState (state: CombatState) =
+        let attackerState =
+            getPrintState
+                (Combat.getCharacter state.Attacker.Participant).Name
+                state.Attacker.Health
+                state.Attacker.Tokens
+                state.Attacker.RoundTokens
+                state.Attacker.Initiate
+        printfn $"Attacker: {attackerState}"
+        let defenderState =
+            getPrintState
+                (Combat.getCharacter state.Defender.Participant).Name
+                state.Defender.Health
+                state.Defender.Tokens
+                state.Defender.RoundTokens
+                state.Defender.Initiate
+        printfn $"Defender: {defenderState}"
+        printfn ""
+        Console.ReadKey () |> ignore
+        state

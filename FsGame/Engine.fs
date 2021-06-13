@@ -24,13 +24,15 @@ module Game =
     let startCombat player =
         let randomIndex = Combat.getRandomInt Monsters.monsters.Length
         let randomEnemy = Monsters.monsters |> Array.item randomIndex
-        let winner =
+        let combatState =
             Combat.start
-                Console.printStartRound
-                player.Hero.Character
-                randomEnemy.Character
-        printfn "*** WINNER ***"
-        Console.printCharacter winner
+                Console.printCombatState
+                (Player player)
+                (Monster randomEnemy)
+        printfn "*** WINNER ***" 
+        combatState.Winner
+        |> Option.map Console.printCharacter
+        |> ignore
     
     let endGame = Console.printEnd
         
@@ -42,7 +44,7 @@ module Game =
             startInit gameConfig
             let player = playerInit ()
             match combatInit () with
-            | Combat.Skip -> endGame ()
-            | Combat.Initiate -> 
+            | Skip -> endGame ()
+            | Initiate -> 
                 startCombat player
                 endGame ()

@@ -3,90 +3,74 @@ namespace RB4.Core
 open RB4.Domain
 
 module Combat = 
-    let throwTokens state =
-        let attackerTokens, attackerRounTokens = [], []
-        let defenderTokens = []
-        { state with
-            AttackerRoundTokens = attackerTokens
-            DefenderRoundTokens = defenderTokens }
-    
-    let calculateInitiative state = state
-    let generateQueue state = state
-    let rec tacticPhase state = state
-
-    let rec round state =
-        state
-        |> throwTokens
-        |> calculateInitiative
-        |> generateQueue
-        |> tacticPhase
-        
-    let start attacker defender =
-        let getCharacter = function
-            | Player player -> player.Hero.Character
-            | Monster monster -> monster.Character
-
-        round {
-            Attacker = attacker
-            AttackerTokens = (getCharacter attacker).Tokens
-            AttackerRoundTokens = []
-            Defender = defender
-            DefenderTokens = (getCharacter defender).Tokens
-            DefenderRoundTokens = [] }
-
-
-
-
-
-
-
-
-    let getWinner (attacker, defender) = 
-        match attacker.Health, defender.Health with
-        | 0uy, _ -> Some defender
-        | _, 0uy -> Some attacker
-        | _ -> None
-
     let randomGenerator = System.Random()
     let getRandomBool step = randomGenerator.NextDouble() >= step
     let getRandomInt max = randomGenerator.Next max
 
-    let throwTokens tokens =
-        tokens |> List.map (fun (step, token) -> 
-            let proc = getRandomBool step
-            token |> Map.find proc)
+    let getCharacter = function
+        | Player player -> player.Hero.Character
+        | Monster monster -> monster.Character
+    let hasWinner (state: CombatState) =
+        match state.Attacker.Health, state.Defender.Health with
+        | 0uy, _ -> Some (getCharacter state.Defender.Participant)
+        | _, 0uy -> Some (getCharacter state.Attacker.Participant)
+        | _ -> None
 
-    let sumInitiative tokens =
-        tokens |> List.sumBy (fun t -> if t.Initiative then 1 else 0)
+    let updateProc step proc = function
+        | true -> proc + step
+        | false -> proc - step
+    let procToken (proc, map) =
+        let side = getRandomBool proc
+        let newProc = updateProc 0.1 proc side
+        let token = map |> Map.find side
+        let newMap = (newProc, map)
+        (newMap, token)
+    let getTokens tokens =
+        tokens
+        |> List.map procToken
+        |> List.unzip
+    let throwTokens state =
+        let aT, aRT = getTokens state.Attacker.Tokens
+        let dT, dRT = getTokens state.Defender.Tokens
+        let attacker = { state.Attacker with Tokens = aT; RoundTokens = aRT }
+        let defender = { state.Defender with Tokens = dT; RoundTokens = dRT }
+        { state with Attacker = attacker; Defender = defender }
 
-    let rec start printRound attacker defender =
-        match getWinner (attacker, defender) with
-        | Some winner -> winner
+    let getInitiative tokens =
+        tokens |> List.sumBy (fun t -> if t.Initiative then 1uy else 0uy)
+    let calculateInitiative state =
+        let aInit = getInitiative state.Attacker.RoundTokens
+        let dInit = getInitiative state.Defender.RoundTokens
+        let attacker = { state.Attacker with Initiate = aInit }
+        let defender = { state.Defender with Initiate = dInit }
+        { state with Attacker = attacker; Defender = defender }
+
+    let generateQueue state = state
+    let rec tacticPhase state = state
+
+    let rec round printState state =
+        match hasWinner state with
+        | Some char -> { state with Winner = Some char }
         | None ->
-            printfn "*** ROUND ***"
-            
-            let attackerTokens = throwTokens attacker.Tokens
-            let attackerInitiative = sumInitiative attackerTokens
-            printRound attacker attackerTokens attackerInitiative
-            
-            let defenderTokens = throwTokens defender.Tokens
-            let defenderInitiative = sumInitiative defenderTokens
-            printRound defender defenderTokens defenderInitiative
-
-            let firstPlayer, firstTokens =
-                if attackerInitiative >= defenderInitiative
-                then attacker, attackerTokens
-                else defender, defenderTokens
-            printfn $"{firstPlayer.Name} is a First player."
-
-            // TODO: Actions cycle...
-            printfn "Choose action: "
-            //Console.printAvailableActions firstPlayer.Sides
-            
-            let hero1H = attacker.Health - 1uy;
-            let hero2H = defender.Health - 1uy;
-            printfn ""
-            start
-                printRound
-                {attacker with Health = hero1H}
-                {defender with Health = hero2H}
+            state
+            |> (throwTokens >> printState)
+            |> (calculateInitiative >> printState)
+            |> (generateQueue >> printState)
+            |> (tacticPhase >> printState)
+            |> round printState 
+        
+    let start printState attacker defender =
+        round printState {
+            Attacker = {
+                Participant = attacker
+                Tokens = (getCharacter attacker).Tokens
+                RoundTokens = []
+                Initiate = 0uy
+                Health = (getCharacter attacker).Health }
+            Defender = {
+                Participant = defender
+                Tokens = (getCharacter defender).Tokens
+                RoundTokens = []
+                Initiate = 0uy
+                Health = (getCharacter defender).Health }
+            Winner = None }

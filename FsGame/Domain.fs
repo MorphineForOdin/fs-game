@@ -29,14 +29,17 @@ module Domain =
     type CombatReaction =
         | Block of byte
         | Pass
-    type CombatParticipant = Player of Player | Monster of Monster
+    type CombatParticipantType = Player of Player | Monster of Monster
+    type CombatParticipant = {
+        Participant: CombatParticipantType
+        Tokens: CombatTokenMap list
+        RoundTokens: CombatToken list
+        Initiate: byte
+        Health: byte }
     type CombatState = {
         Attacker: CombatParticipant
-        AttackerTokens: CombatTokenMap list
-        AttackerRoundTokens: CombatToken list
         Defender: CombatParticipant
-        DefenderTokens: CombatTokenMap list
-        DefenderRoundTokens: CombatToken list }
+        Winner: Character option }
 
     module Game =
         type Config = {
