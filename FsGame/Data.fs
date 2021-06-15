@@ -10,28 +10,28 @@ module Heroes =
             Health = 9uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 2uy; Initiative = false }
-                    false, { Type = Shield 1uy; Initiative = false } ])
+                    true, { Type = Axe 2uy; IsInitiative = false }
+                    false, { Type = Shield 1uy; IsInitiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 1uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = true } ])
+                    true, { Type = Axe 1uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 1uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = false } ]) ] } }
+                    true, { Type = Axe 1uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = false } ]) ] } }
     let masterThorn: Hero = {
         Character = {
             Name = "Master Thorn"
             Health = 8uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 1uy; Initiative = false }
-                    false, { Type = Shield 1uy; Initiative = false } ])
+                    true, { Type = Spell 1uy; IsInitiative = false }
+                    false, { Type = Shield 1uy; IsInitiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 1uy; Initiative = true }
-                    false, { Type = Nothing; Initiative = false } ])
+                    true, { Type = Spell 1uy; IsInitiative = true }
+                    false, { Type = Nothing; IsInitiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 1uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = true } ]) ] } }
+                    true, { Type = Spell 1uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = true } ]) ] } }
     let heroes = [| lordHawthorne; masterThorn |]
 
 module Monsters =
@@ -41,26 +41,26 @@ module Monsters =
             Health = 6uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 1uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = true } ])
+                    true, { Type = Axe 1uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 1uy; Initiative = true }
-                    false, { Type = Shield 1uy; Initiative = false } ])
+                    true, { Type = Axe 1uy; IsInitiative = true }
+                    false, { Type = Shield 1uy; IsInitiative = false } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Axe 1uy; Initiative = false }
-                    false, { Type = Shield 1uy; Initiative = false } ]) ] } }
+                    true, { Type = Axe 1uy; IsInitiative = false }
+                    false, { Type = Shield 1uy; IsInitiative = false } ]) ] } }
     let warlock : Monster = {
         Character = {
             Name = "Warlock"
             Health = 5uy
             Tokens = [
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 2uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = true } ])
+                    true, { Type = Spell 2uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 1uy; Initiative = false }
-                    false, { Type = Nothing; Initiative = true } ])
+                    true, { Type = Spell 1uy; IsInitiative = false }
+                    false, { Type = Nothing; IsInitiative = true } ])
                 (0.5, Map.initFromList [
-                    true, { Type = Spell 1uy; Initiative = false }
-                    false, { Type = Shield 1uy; Initiative = true } ]) ] } }
+                    true, { Type = Spell 1uy; IsInitiative = false }
+                    false, { Type = Shield 1uy; IsInitiative = true } ]) ] } }
     let monsters = [| skeleton; warlock |]

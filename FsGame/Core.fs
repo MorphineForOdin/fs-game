@@ -37,15 +37,21 @@ module Combat =
         { state with Attacker = attacker; Defender = defender }
 
     let getInitiative tokens =
-        tokens |> List.sumBy (fun t -> if t.Initiative then 1uy else 0uy)
+        tokens |> List.sumBy (fun t -> if t.IsInitiative then 1uy else 0uy)
     let calculateInitiative state =
         let aInit = getInitiative state.Attacker.RoundTokens
         let dInit = getInitiative state.Defender.RoundTokens
-        let attacker = { state.Attacker with Initiate = aInit }
-        let defender = { state.Defender with Initiate = dInit }
+        let attacker = { state.Attacker with Initiative = aInit }
+        let defender = { state.Defender with Initiative = dInit }
         { state with Attacker = attacker; Defender = defender }
 
-    let generateQueue state = state
+    let generateQueue state = 
+        let first, last =
+            if state.Attacker.Initiative >= state.Defender.Initiative
+            then state.Attacker, state.Defender
+            else state.Defender, state.Attacker
+        { state with Queue = [first; last] }
+
     let rec tacticPhase state = state
 
     let rec round printState state =
@@ -53,10 +59,10 @@ module Combat =
         | Some char -> { state with Winner = Some char }
         | None ->
             state
-            |> (throwTokens >> printState)
-            |> (calculateInitiative >> printState)
+            |> throwTokens
+            |> calculateInitiative
             |> (generateQueue >> printState)
-            |> (tacticPhase >> printState)
+            |> tacticPhase
             |> round printState 
         
     let start printState attacker defender =
@@ -64,13 +70,14 @@ module Combat =
             Attacker = {
                 Participant = attacker
                 Tokens = (getCharacter attacker).Tokens
+                Health = (getCharacter attacker).Health
                 RoundTokens = []
-                Initiate = 0uy
-                Health = (getCharacter attacker).Health }
+                Initiative = 0uy }
             Defender = {
                 Participant = defender
                 Tokens = (getCharacter defender).Tokens
+                Health = (getCharacter defender).Health
                 RoundTokens = []
-                Initiate = 0uy
-                Health = (getCharacter defender).Health }
-            Winner = None }
+                Initiative = 0uy }
+            Winner = None
+            Queue = [] }

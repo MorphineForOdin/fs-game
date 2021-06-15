@@ -43,7 +43,7 @@ module Console =
             | Shield amount -> $"{amount}S"
             | Nothing -> "N"
         let initiativeString = 
-            match tokenSide.Initiative with
+            match tokenSide.IsInitiative with
             | true -> "+"
             | false -> "-"
         actionString + initiativeString
@@ -97,7 +97,7 @@ module Console =
                 state.Attacker.Health
                 state.Attacker.Tokens
                 state.Attacker.RoundTokens
-                state.Attacker.Initiate
+                state.Attacker.Initiative
         printfn $"Attacker: {attackerState}"
         let defenderState =
             getPrintState
@@ -105,7 +105,7 @@ module Console =
                 state.Defender.Health
                 state.Defender.Tokens
                 state.Defender.RoundTokens
-                state.Defender.Initiate
+                state.Defender.Initiative
         printfn $"Defender: {defenderState}"
         printfn ""
         Console.ReadKey () |> ignore

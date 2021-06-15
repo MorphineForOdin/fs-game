@@ -9,7 +9,7 @@ module Domain =
         | Nothing
     type CombatToken = {
         Type: CombatTokenType
-        Initiative: bool }
+        IsInitiative: bool }
     type CombatTokenMap = float * Map<bool, CombatToken>
     type Character = {
         Name: string
@@ -33,13 +33,14 @@ module Domain =
     type CombatParticipant = {
         Participant: CombatParticipantType
         Tokens: CombatTokenMap list
+        Health: byte
         RoundTokens: CombatToken list
-        Initiate: byte
-        Health: byte }
+        Initiative: byte }
     type CombatState = {
         Attacker: CombatParticipant
         Defender: CombatParticipant
-        Winner: Character option }
+        Winner: Character option
+        Queue: CombatParticipant list }
 
     module Game =
         type Config = {
