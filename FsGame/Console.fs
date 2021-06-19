@@ -12,7 +12,7 @@ module Console =
         Console.ResetColor ()
         Console.ForegroundColor <- ConsoleColor.Magenta
         File.readLines path
-            |> Seq.iter (fun line -> printfn "%s" line; Thread.Sleep 100)
+            |> Seq.iter (fun line -> printfn "%s" line; Thread.Sleep 50)
         Console.ForegroundColor <- ConsoleColor.Cyan
     
     let proceed statement =
@@ -55,7 +55,10 @@ module Console =
 
     let getTokensString (tokens: CombatTokenMap list) =
         tokens
-        |> List.fold (fun acc (proc, map) -> $"{acc}{proc}={getTokenMapString map} ") " "
+        |> List.fold
+            (fun acc (proc, map) -> sprintf "%s%.1f=%s " acc proc (getTokenMapString map))
+            " "
+        |> String.trim
 
     let printCharacter (character: Character) =
         let tokensStr = getTokensString character.Tokens
@@ -88,7 +91,7 @@ module Console =
     let getPrintState name health tokens roundT initiative =
         let tokensStr = getTokensString tokens
         let actionsString = roundT |> List.fold (fun acc cur -> $"{acc}{getTokenString cur} ") " "
-        $"{name} H={health}; T=[{tokensStr}]; R=[{actionsString}]; I={initiative}"
+        $"%-15s{name} H={health};\tT=[{tokensStr}];\tR=[{actionsString}];\tI={initiative}"
     
     let printCombatState (state: CombatState) =
         let attackerState =

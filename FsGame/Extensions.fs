@@ -1,6 +1,14 @@
 namespace RB4
 
 [<RequireQualifiedAccess>]
+module String =
+    open System
+    let trim (input: string ) =
+        match input with
+        | null -> String.Empty
+        | _ -> input.Trim()
+
+[<RequireQualifiedAccess>]
 module Option =
     let fromTryTuple = function
         | false, _ -> None
