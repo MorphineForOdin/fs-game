@@ -2,6 +2,16 @@ namespace RB4.Domain
 
 [<AutoOpen>]
 module Domain = 
+    // * Environment:
+    type EnvironmentConfig = { GamePath: string }
+    
+    // * Game:
+    type GameConfig = {
+        ResourcesPath: string
+        TokenStabilizationStep: float }
+    type GameMenu = Start | Exit
+
+    // * Combat tokens:
     type CombatTokenType =
         | Axe of byte
         | Spell of byte
@@ -11,6 +21,11 @@ module Domain =
         Type: CombatTokenType
         IsInitiative: bool }
     type CombatTokenMap = float * Map<bool, CombatToken>
+    type CombatTokenState = {
+        Token: CombatTokenMap
+        State: CombatToken }
+
+    // * Charackters:
     type Character = {
         Name: string
         Health: byte
@@ -21,7 +36,10 @@ module Domain =
         Name: string
         Hero: Hero }
         
+    // TODO: Remove legacy combat menu DU.
     type Menu = Initiate | Skip
+
+    // * Combat:
     type CombatAction =
         | PhysicalAttack of byte
         | MagicalAttack of byte
@@ -32,21 +50,11 @@ module Domain =
     type CombatParticipantType = Player of Player | Monster of Monster
     type CombatParticipant = {
         Participant: CombatParticipantType
-        Tokens: CombatTokenMap list
-        Health: byte
-        RoundTokens: CombatToken list
-        Initiative: byte }
+        TokensPool: CombatTokenState list
+        CurrentHealth: byte
+        RoundInitiative: byte }
     type CombatState = {
         Attacker: CombatParticipant
         Defender: CombatParticipant
         Winner: Character option
         Queue: CombatParticipant list }
-
-    module Game =
-        type Config = {
-            ResourcesPath: string
-            TokenStabilizationStep: float }
-        type Menu = Start | Exit
-
-    module Environment =
-        type Config = { GamePath: string }

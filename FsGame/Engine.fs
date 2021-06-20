@@ -7,14 +7,14 @@ open RB4.Data
 open RB4.Core
 
 module Game =
-    let configInit (envConfig: Environment.Config) : Game.Config = {
+    let configInit (envConfig: EnvironmentConfig) : GameConfig = {
         ResourcesPath = envConfig.GamePath +/ "resources"
         TokenStabilizationStep = 0.1 }
     
-    let welcomeInit (config: Game.Config) =
+    let welcomeInit (config: GameConfig) =
         config.ResourcesPath +/ "welcome.txt" |> Console.printWelcome
     
-    let startInit (config: Game.Config) =
+    let startInit (config: GameConfig) =
         config.ResourcesPath +/ "logo.txt" |> Console.printImage
     
     let playerInit () = Console.initPlayer Heroes.heroes
@@ -36,11 +36,11 @@ module Game =
     
     let endGame = Console.printEnd
         
-    let start (envConfig: Environment.Config) =
+    let start (envConfig: EnvironmentConfig) =
         let gameConfig = configInit envConfig
         match welcomeInit gameConfig with
-        | Game.Exit -> endGame ()
-        | Game.Start ->
+        | Exit -> endGame ()
+        | Start ->
             startInit gameConfig
             let player = playerInit ()
             match combatInit () with

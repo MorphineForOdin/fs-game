@@ -2,6 +2,7 @@ namespace RB4.IO
 
 open System
 open System.Threading
+
 open RB4
 open RB4.Domain
 open RB4.Core
@@ -26,8 +27,8 @@ module Console =
         Console.ReadKey () |> ignore
         printImage welcomeImagePath
         match proceed "Start game?" with
-        | true -> Game.Start
-        | false -> Game.Exit
+        | true -> Start
+        | false -> Exit
     
     let printEnd () =
         printfn "*** BYE-BYE ***"
@@ -35,13 +36,13 @@ module Console =
         Console.ReadKey () |> ignore
         ()
 
-    let getTokenString tokenSide =
+    let getTokenTypeString tokenSide =
         let actionString = 
             match tokenSide.Type with
             | Axe amount -> $"{amount}P"
             | Spell amount -> $"{amount}M"
             | Shield amount -> $"{amount}S"
-            | Nothing -> "N"
+            | Nothing -> " N"
         let initiativeString = 
             match tokenSide.IsInitiative with
             | true -> "+"
@@ -49,15 +50,16 @@ module Console =
         actionString + initiativeString
 
     let getTokenMapString token = 
-        let sideA = Map.find true token |> getTokenString
-        let sideB = Map.find false token |> getTokenString
+        let sideA = Map.find true token |> getTokenTypeString
+        let sideB = Map.find false token |> getTokenTypeString
         $"({sideA}|{sideB})"
+    
+    let getTokenString (proc, map) =
+        sprintf "%.1f=%s " proc (getTokenMapString map)
 
     let getTokensString (tokens: CombatTokenMap list) =
         tokens
-        |> List.fold
-            (fun acc (proc, map) -> sprintf "%s%.1f=%s " acc proc (getTokenMapString map))
-            " "
+        |> List.fold (fun acc token -> $"{acc}{getTokenString token} ") " "
         |> String.trim
 
     let printCharacter (character: Character) =
@@ -88,27 +90,30 @@ module Console =
         | true -> Initiate
         | false -> Skip
 
-    let getPrintState name health tokens roundT initiative =
-        let tokensStr = getTokensString tokens
-        let actionsString = roundT |> List.fold (fun acc cur -> $"{acc}{getTokenString cur} ") " "
-        $"%-15s{name} H={health};\tT=[{tokensStr}];\tR=[{actionsString}];\tI={initiative}"
+    let getPrintState name health tokens initiative =
+        let tokensString =
+            tokens
+            |> List.map (fun ts ->
+                let tokenStr = getTokenString ts.Token |> String.trim
+                let stateStr = getTokenTypeString ts.State
+                $"({stateStr})--{tokenStr}")
+            |> List.reduce (fun acc str -> $"{acc} {str}")
+        $"%-15s{name} H={health};\tT=[{tokensString}];\tI={initiative}"
     
     let printCombatState (state: CombatState) =
         let attackerState =
             getPrintState
                 (Combat.getCharacter state.Attacker.Participant).Name
-                state.Attacker.Health
-                state.Attacker.Tokens
-                state.Attacker.RoundTokens
-                state.Attacker.Initiative
+                state.Attacker.CurrentHealth
+                state.Attacker.TokensPool
+                state.Attacker.RoundInitiative
         printfn $"Attacker: {attackerState}"
         let defenderState =
             getPrintState
                 (Combat.getCharacter state.Defender.Participant).Name
-                state.Defender.Health
-                state.Defender.Tokens
-                state.Defender.RoundTokens
-                state.Defender.Initiative
+                state.Defender.CurrentHealth
+                state.Defender.TokensPool
+                state.Defender.RoundInitiative
         printfn $"Defender: {defenderState}"
         printfn ""
         Console.ReadKey () |> ignore

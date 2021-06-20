@@ -10,8 +10,14 @@ module Combat =
     let getCharacter = function
         | Player player -> player.Hero.Character
         | Monster monster -> monster.Character
+    let initTokensPool participant =
+        (getCharacter participant).Tokens
+        |> List.map (fun token -> {
+            Token = token
+            State = { Type = Nothing; IsInitiative = false }})
+
     let hasWinner (state: CombatState) =
-        match state.Attacker.Health, state.Defender.Health with
+        match state.Attacker.CurrentHealth, state.Defender.CurrentHealth with
         | 0uy, _ -> Some (getCharacter state.Defender.Participant)
         | _, 0uy -> Some (getCharacter state.Attacker.Participant)
         | _ -> None
@@ -22,32 +28,33 @@ module Combat =
     let procToken (proc, map) =
         let side = getRandomBool proc
         let newProc = updateProc 0.1 proc side
-        let token = map |> Map.find side
-        let newMap = (newProc, map)
-        (newMap, token)
-    let getTokens tokens =
+        let tokenState = map |> Map.find side
+        let updatedTokenMap = (newProc, map)
+        { Token = updatedTokenMap; State = tokenState }
+    let procTokens (tokens: CombatTokenState list) =
         tokens
-        |> List.map procToken
-        |> List.unzip
+        |> List.map (fun t -> procToken t.Token)
     let throwTokens state =
-        let aT, aRT = getTokens state.Attacker.Tokens
-        let dT, dRT = getTokens state.Defender.Tokens
-        let attacker = { state.Attacker with Tokens = aT; RoundTokens = aRT }
-        let defender = { state.Defender with Tokens = dT; RoundTokens = dRT }
+        let attackerTokens = procTokens state.Attacker.TokensPool
+        let defenderTokens = procTokens state.Defender.TokensPool
+        let attacker = { state.Attacker with TokensPool = attackerTokens }
+        let defender = { state.Defender with TokensPool = defenderTokens }
         { state with Attacker = attacker; Defender = defender }
 
     let getInitiative tokens =
-        tokens |> List.sumBy (fun t -> if t.IsInitiative then 1uy else 0uy)
+        tokens
+        |> List.map (fun s -> s.State)
+        |> List.sumBy (fun t -> if t.IsInitiative then 1uy else 0uy)
     let calculateInitiative state =
-        let aInit = getInitiative state.Attacker.RoundTokens
-        let dInit = getInitiative state.Defender.RoundTokens
-        let attacker = { state.Attacker with Initiative = aInit }
-        let defender = { state.Defender with Initiative = dInit }
+        let attackerInit = getInitiative state.Attacker.TokensPool
+        let defenderInit = getInitiative state.Defender.TokensPool
+        let attacker = { state.Attacker with RoundInitiative = attackerInit }
+        let defender = { state.Defender with RoundInitiative = defenderInit }
         { state with Attacker = attacker; Defender = defender }
 
     let generateQueue state = 
         let first, last =
-            if state.Attacker.Initiative >= state.Defender.Initiative
+            if state.Attacker.RoundInitiative >= state.Defender.RoundInitiative
             then state.Attacker, state.Defender
             else state.Defender, state.Attacker
         { state with Queue = [first; last] }
@@ -69,15 +76,13 @@ module Combat =
         round printState {
             Attacker = {
                 Participant = attacker
-                Tokens = (getCharacter attacker).Tokens
-                Health = (getCharacter attacker).Health
-                RoundTokens = []
-                Initiative = 0uy }
+                TokensPool = initTokensPool attacker
+                CurrentHealth = (getCharacter attacker).Health
+                RoundInitiative = 0uy }
             Defender = {
                 Participant = defender
-                Tokens = (getCharacter defender).Tokens
-                Health = (getCharacter defender).Health
-                RoundTokens = []
-                Initiative = 0uy }
+                TokensPool = initTokensPool defender
+                CurrentHealth = (getCharacter defender).Health
+                RoundInitiative = 0uy }
             Winner = None
             Queue = [] }
