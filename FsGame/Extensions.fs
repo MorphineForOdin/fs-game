@@ -3,10 +3,12 @@ namespace RB4
 [<RequireQualifiedAccess>]
 module String =
     open System
-    let trim (input: string ) =
+    let trim (input: string) =
         match input with
         | null -> String.Empty
         | _ -> input.Trim()
+    let split delimiter (input: string) =
+        input.Split [| delimiter |]
 
 [<RequireQualifiedAccess>]
 module Option =

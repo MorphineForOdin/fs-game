@@ -27,8 +27,8 @@ module Game =
         let combatState =
             Combat.start
                 Console.printCombatState
-                (Player player)
-                (Monster randomEnemy)
+                (Player player, Console.combatActionTrigger, Console.combatReactionTrigger)
+                (Monster randomEnemy, Console.combatActionTrigger, Console.combatReactionTrigger)
         printfn "*** WINNER ***" 
         combatState.Winner
         |> Option.map Console.printCharacter

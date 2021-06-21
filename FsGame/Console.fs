@@ -13,7 +13,7 @@ module Console =
         Console.ResetColor ()
         Console.ForegroundColor <- ConsoleColor.Magenta
         File.readLines path
-            |> Seq.iter (fun line -> printfn "%s" line; Thread.Sleep 50)
+            |> Seq.iter (fun line -> printfn "%s" line; Thread.Sleep 40)
         Console.ForegroundColor <- ConsoleColor.Cyan
     
     let proceed statement =
@@ -118,3 +118,26 @@ module Console =
         printfn ""
         Console.ReadKey () |> ignore
         state
+    
+    let getActionString = function
+        | PhysicalAttack damage -> $"Physical attack - {damage}"
+        | MagicalAttack damage -> $"Magical attack - {damage}"
+        | _ -> "Pass"
+        
+    let combatActionTrigger tokens = 
+        let combatActions =
+            tokens
+            |> List.map (fun t -> (Combat.getActionFromToken t.State.Type, t))
+            |> List.toArray
+        printfn "Possible actions:"
+        combatActions
+            |> Array.iteri (fun i (a, _) -> printfn $"[{i}] - {getActionString a}")
+        let actionIndexes =
+            Console.ReadLine ()
+            |> String.split ' '
+            |> Array.map int
+        // TODO: Filter out input tokens + add right action.
+        (PassAction, tokens)
+    
+    let combatReactionTrigger tokens =
+        (PassReaction, tokens)

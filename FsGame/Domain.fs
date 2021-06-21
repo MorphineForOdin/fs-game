@@ -43,16 +43,20 @@ module Domain =
     type CombatAction =
         | PhysicalAttack of byte
         | MagicalAttack of byte
-        | Pass
+        | PassAction
     type CombatReaction =
         | Block of byte
-        | Pass
+        | PassReaction
+    type CombatActionTrigger = CombatTokenState list -> CombatAction * CombatTokenState list
+    type CombatResponseTrigger = CombatTokenState list -> CombatReaction * CombatTokenState list
     type CombatParticipantType = Player of Player | Monster of Monster
     type CombatParticipant = {
         Participant: CombatParticipantType
         TokensPool: CombatTokenState list
         CurrentHealth: byte
-        RoundInitiative: byte }
+        RoundInitiative: byte
+        ActionTrigger: CombatActionTrigger
+        ResponseTrigger: CombatResponseTrigger }
     type CombatState = {
         Attacker: CombatParticipant
         Defender: CombatParticipant

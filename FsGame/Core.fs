@@ -59,7 +59,17 @@ module Combat =
             else state.Defender, state.Attacker
         { state with Queue = [first; last] }
 
-    let rec tacticPhase state = state
+    let getActionFromToken = function
+        | Axe damage -> PhysicalAttack damage
+        | Spell damage -> MagicalAttack damage
+        | _ -> PassAction
+    let getReactionFromToken = function
+        | Shield amount -> Block amount
+        | _ -> PassReaction
+    let rec tacticPhase state =
+        let first = state.Queue.Head
+        let action = first.ActionTrigger first.TokensPool
+        state
 
     let rec round printState state =
         match hasWinner state with
@@ -72,17 +82,24 @@ module Combat =
             |> tacticPhase
             |> round printState 
         
-    let start printState attacker defender =
+    let start
+        printState
+        (attacker, attackerActionTrigger, attackerResponseTrigger)
+        (defender, defenderActionTrigger, defenderResponseTrigger) =
         round printState {
             Attacker = {
                 Participant = attacker
                 TokensPool = initTokensPool attacker
                 CurrentHealth = (getCharacter attacker).Health
-                RoundInitiative = 0uy }
+                RoundInitiative = 0uy
+                ActionTrigger = attackerActionTrigger
+                ResponseTrigger = attackerResponseTrigger }
             Defender = {
                 Participant = defender
                 TokensPool = initTokensPool defender
                 CurrentHealth = (getCharacter defender).Health
-                RoundInitiative = 0uy }
+                RoundInitiative = 0uy
+                ActionTrigger = defenderActionTrigger
+                ResponseTrigger = defenderResponseTrigger }
             Winner = None
             Queue = [] }
