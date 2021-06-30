@@ -132,12 +132,19 @@ module Console =
         printfn "Possible actions:"
         combatActions
             |> Array.iteri (fun i (a, _) -> printfn $"[{i}] - {getActionString a}")
-        let actionIndexes =
+        let actionIndex =
             Console.ReadLine ()
             |> String.split ' '
             |> Array.map int
-        // TODO: Filter out input tokens + add right action.
-        (PassAction, tokens)
+            // TODO: Handle few same actions at the same time.
+            |> Array.head
+        let chosenAction = combatActions.[actionIndex] |> fst
+        printfn $"Chosen action - {getActionString chosenAction}"
+        let leftTokens =
+            combatActions
+            |> Array.removeil actionIndex
+            |> List.map snd
+        (chosenAction, leftTokens)
     
     let combatReactionTrigger tokens =
         (PassReaction, tokens)

@@ -8,7 +8,25 @@ module String =
         | null -> String.Empty
         | _ -> input.Trim()
     let split delimiter (input: string) =
-        input.Split [| delimiter |]
+        match input with
+        | null -> [||]
+        | _ -> input.Split [| delimiter |]
+
+[<RequireQualifiedAccess>]
+module Array =
+    let remove x (xs: 'a array) =
+        match Array.tryFindIndex ((=) x) xs with
+        | Some 0 -> xs.[1..]
+        | Some i -> Array.append xs.[..i-1] xs.[i+1..]
+        | None -> xs
+    let removei i (xs: 'a array) =
+        if i < xs.Length
+        then Array.append xs.[..i-1] xs.[i+1..]
+        else xs
+    let removeil i (xs: 'a array) =
+        if i < xs.Length
+        then (xs.[..i-1] |> Array.toList) @ (xs.[i+1..] |> Array.toList)
+        else xs |> Array.toList
 
 [<RequireQualifiedAccess>]
 module Option =

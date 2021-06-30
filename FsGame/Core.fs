@@ -57,6 +57,7 @@ module Combat =
             if state.Attacker.RoundInitiative >= state.Defender.RoundInitiative
             then state.Attacker, state.Defender
             else state.Defender, state.Attacker
+        // TODO: Use queue instead of list.
         { state with Queue = [first; last] }
 
     let getActionFromToken = function
@@ -66,10 +67,14 @@ module Combat =
     let getReactionFromToken = function
         | Shield amount -> Block amount
         | _ -> PassReaction
-    let rec tacticPhase state =
-        let first = state.Queue.Head
-        let action = first.ActionTrigger first.TokensPool
-        state
+    let rec tacticPhase printState state =
+        match hasWinner state with
+        | Some char -> { state with Winner = Some char }
+        | None ->
+            let first = state.Queue.Head
+            let (action, tokens) = first.ActionTrigger first.TokensPool
+            // TODO: Reset player tokens and apply chosen action.
+            state
 
     let rec round printState state =
         match hasWinner state with
@@ -79,7 +84,7 @@ module Combat =
             |> throwTokens
             |> calculateInitiative
             |> (generateQueue >> printState)
-            |> tacticPhase
+            |> tacticPhase printState
             |> round printState 
         
     let start
