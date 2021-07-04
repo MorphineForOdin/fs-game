@@ -62,15 +62,18 @@ module QueueType =
     
     [<RequireQualifiedAccess>]
     module Queue =
-        let empty = Queue([], [])
+        let empty = Queue ([], [])
+        let isEmpty = function
+            | Queue ([], []) -> true
+            | _ -> false
         let enqueue e = function
-            | Queue(fs, bs) -> Queue(e :: fs, bs)
+            | Queue (fs, bs) -> Queue (e :: fs, bs)
         let dequeue = function
-            | Queue([], []) -> failwith "Empty queue!"
-            | Queue(fs, b :: bs) -> b, Queue(fs, bs)
-            | Queue(fs, []) -> 
+            | Queue ([], []) -> failwith "Empty queue!"
+            | Queue (fs, b :: bs) -> b, Queue (fs, bs)
+            | Queue (fs, []) -> 
                 let bs = List.rev fs
-                bs.Head, Queue([], bs.Tail)
+                bs.Head, Queue ([], bs.Tail)
 
 module Operators =
     open System.IO

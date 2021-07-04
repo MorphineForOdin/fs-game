@@ -75,12 +75,19 @@ module Combat =
         match hasWinner state with
         | Some char -> { state with Winner = Some char }
         | None ->
-            let first, queue = Queue.dequeue state.Queue
-            let (action, tokens) = first.ActionTrigger first.TokensPool
-            // TODO: Handle active player action.
-            let updatedPlayer = { first with TokensPool = tokens }
-            let updatedQueue = queue |> Queue.enqueue updatedPlayer
-            { state with Queue = updatedQueue }
+            match Queue.isEmpty state.Queue with
+            | true -> state
+            | false ->
+                let first, queue = Queue.dequeue state.Queue
+                let action, tokens = first.ActionTrigger first.TokensPool
+                // TODO: Handle active player action.
+                let updatedPlayer = { first with TokensPool = tokens }
+                let updatedQueue =
+                    match tokens with
+                    | [] -> queue
+                    | _ -> queue |> Queue.enqueue updatedPlayer
+                printState state |> ignore
+                tacticPhase printState { state with Queue = updatedQueue }
 
     let rec round printState state =
         match hasWinner state with
