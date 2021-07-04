@@ -56,6 +56,22 @@ module Result =
         | Some value -> Ok value
         | None -> Error error
 
+module QueueType =
+    type queue<'a> =
+        | Queue of 'a list * 'a list
+    
+    [<RequireQualifiedAccess>]
+    module Queue =
+        let empty = Queue([], [])
+        let enqueue e = function
+            | Queue(fs, bs) -> Queue(e :: fs, bs)
+        let dequeue = function
+            | Queue([], []) -> failwith "Empty queue!"
+            | Queue(fs, b :: bs) -> b, Queue(fs, bs)
+            | Queue(fs, []) -> 
+                let bs = List.rev fs
+                bs.Head, Queue([], bs.Tail)
+
 module Operators =
     open System.IO
     let (+/) parentPath siblingPath =

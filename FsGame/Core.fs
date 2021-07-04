@@ -1,5 +1,6 @@
 namespace RB4.Core
 
+open RB4.QueueType
 open RB4.Domain
 
 module Combat = 
@@ -57,8 +58,11 @@ module Combat =
             if state.Attacker.RoundInitiative >= state.Defender.RoundInitiative
             then state.Attacker, state.Defender
             else state.Defender, state.Attacker
-        // TODO: Use queue instead of list.
-        { state with Queue = [first; last] }
+        let queue =
+            Queue.empty
+            |> Queue.enqueue first
+            |> Queue.enqueue last
+        { state with Queue = queue }
 
     let getActionFromToken = function
         | Axe damage -> PhysicalAttack damage
@@ -71,10 +75,12 @@ module Combat =
         match hasWinner state with
         | Some char -> { state with Winner = Some char }
         | None ->
-            let first = state.Queue.Head
+            let first, queue = Queue.dequeue state.Queue
             let (action, tokens) = first.ActionTrigger first.TokensPool
-            // TODO: Reset player tokens and apply chosen action.
-            state
+            // TODO: Handle active player action.
+            let updatedPlayer = { first with TokensPool = tokens }
+            let updatedQueue = queue |> Queue.enqueue updatedPlayer
+            { state with Queue = updatedQueue }
 
     let rec round printState state =
         match hasWinner state with
@@ -107,4 +113,4 @@ module Combat =
                 ActionTrigger = defenderActionTrigger
                 ResponseTrigger = defenderResponseTrigger }
             Winner = None
-            Queue = [] }
+            Queue = Queue.empty }

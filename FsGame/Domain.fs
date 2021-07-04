@@ -1,5 +1,7 @@
 namespace RB4.Domain
 
+open RB4.QueueType
+
 [<AutoOpen>]
 module Domain = 
     // * Environment:
@@ -61,4 +63,4 @@ module Domain =
         Attacker: CombatParticipant
         Defender: CombatParticipant
         Winner: Character option
-        Queue: CombatParticipant list }
+        Queue: CombatParticipant queue }
